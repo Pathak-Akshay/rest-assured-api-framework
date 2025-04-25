@@ -1,0 +1,21 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="API Suite" parallel="methods" thread-count="4">
+    <test name="API Tests">
+        <!-- Below lines are commented as we are handling group functionality from
+        build.gradle itself -->
+     <!--   <groups>
+                <run>
+                        <include name="user"/>
+                        <include name="smoke"/>
+                        <include name="regression"/>
+                        <include name="get"/>
+                        <include name="create"/>
+                        <include name="delete"/>
+                </run>
+        </groups> -->
+        <classes>
+            <class name="tests.UserTests"/>
+            <!-- Add other test classes here -->
+        </classes>
+    </test>
+</suite>

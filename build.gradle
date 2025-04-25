@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+    id 'io.qameta.allure' version '2.11.2'
+}
+
+group = 'com.sdet.api'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Rest Assured
+    testImplementation 'io.rest-assured:rest-assured:5.4.0'
+    testImplementation 'io.rest-assured:json-path:5.4.0'
+    testImplementation 'io.rest-assured:json-schema-validator:5.4.0'
+
+    // TestNG
+    testImplementation 'org.testng:testng:7.8.0'
+
+    // Jackson for JSON parsing
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.0'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    // Java Faker
+    implementation 'com.github.javafaker:javafaker:1.0.2'
+
+    // Logging
+    implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
+    implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
+
+    // Allure reporting
+    testImplementation 'io.qameta.allure:allure-testng:2.17.3'
+    testImplementation 'io.qameta.allure:allure-rest-assured:2.17.3'
+}
+
+test {
+    useTestNG() {
+
+        suites 'src/test/resources/testng.xml'
+        if(System.getProperty("groups")){
+            includeGroups System.getProperty("groups")
+            //Now if you pass -Dgroups=smoke, it will include only the smoke tests.
+            // ./gradlew clean test -Dgroups=smoke
+            // ./gradlew clean test -Dgroups="smoke,regression"
+        }
+    }
+}
