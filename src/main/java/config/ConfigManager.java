@@ -1,7 +1,6 @@
 package config;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -27,8 +26,28 @@ public class ConfigManager {
         return properties.getProperty("baseURL");
     }
 
+    public static String getBookingPath() {
+
+        return properties.getProperty("bookingPath");
+    }
+
+    public static String getAuthPath(){
+
+        return properties.getProperty("authPath");
+    }
+
     public static String getEnv() {
 
         return properties.getProperty("env");
+    }
+
+    public static String getUser(){
+
+        return properties.getProperty("username");
+    }
+
+    public static String getPassword(){
+
+        return properties.getProperty("password");
     }
 }
