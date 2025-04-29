@@ -26,8 +26,7 @@ pipeline {
       stage('Run Tests') {
          steps {
             script {
-               docker.image("${IMAGE_NAME}").inside {
-                  sh './gradlew test --no-daemon'
+               sh "docker run --rm ${IMAGE_NAME}"
                }
             }
          }
