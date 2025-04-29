@@ -3,7 +3,6 @@ pipeline {
    agent any
 
    environment {
-
       IMAGE_NAME = "rest-assured-api-framework"
    }
 
@@ -11,15 +10,15 @@ pipeline {
 
       stage('Checkout') {
          steps {
-            git branch : 'main', url : 'https://github.com/Pathak-Akshay/rest-assured-api-framework.git'
+            git branch: 'main', url: 'https://github.com/Pathak-Akshay/rest-assured-api-framework.git'
          }
       }
 
       stage('Build Docker Image') {
          steps {
-             script {
+            script {
                docker.build("${IMAGE_NAME}")
-             }
+            }
          }
       }
 
@@ -27,7 +26,6 @@ pipeline {
          steps {
             script {
                sh "docker run --rm ${IMAGE_NAME}"
-               }
             }
          }
       }
