@@ -1,9 +1,6 @@
 pipeline {
     agent {
-        docker {
-            image 'gradle:8.5-jdk17'  // You can change this to your preferred JDK + Gradle combo
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
-        }
+        label 'windows-docker-agent'
     }
 
     environment {
