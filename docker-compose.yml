@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  jenkins-controller:
+    image: jenkins/jenkins:lts
+    container_name: jenkins-controller
+    ports:
+      - "8080:8080"     # Jenkins web interface
+      - "50000:50000"   # Inbound agent communication
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    networks:
+      - jenkins-net
+
+  jenkins-agent:
+    image: jenkins/inbound-agent
+    container_name: jenkins-agent
+    depends_on:
+      - jenkins-controller
+    environment:
+      - JENKINS_URL=${JENKINS_URL}               # <-- From .env
+      - JENKINS_SECRET=${JENKINS_SECRET}         # <-- From .env
+      - JENKINS_AGENT_NAME=${JENKINS_AGENT_NAME} # <-- From .env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - jenkins_agent_home:/home/jenkins/agent
+    networks:
+      - jenkins-net
+    restart: "no"
+
+volumes:
+  jenkins_home:
+  jenkins_agent_home:
+
+networks:
+  jenkins-net:
