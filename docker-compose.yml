@@ -13,7 +13,9 @@ services:
       - jenkins-net
 
   jenkins-agent:
-    image: jenkins/inbound-agent
+    build:
+      context: .
+      dockerfile: Dockerfile.agent
     container_name: jenkins-agent
     depends_on:
       - jenkins-controller
