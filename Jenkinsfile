@@ -22,7 +22,7 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                sh 'docker run --rm ${IMAGE_NAME}'
+                sh 'docker run --rm -v $PWD/test-results:/app/build/test-results ${IMAGE_NAME}'
             }
         }
     }
@@ -30,7 +30,7 @@ pipeline {
     post {
         always {
             // Make sure this path exists or Gradle is generating XML test reports
-            junit '**/build/test-results/test/*.xml'
+            junit 'test-results/test/*.xml'
         }
     }
 }
