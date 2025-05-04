@@ -25,7 +25,8 @@ pipeline {
                 sh '''
                             mkdir -p test-results/test
                             docker run --rm \
-                              -v $PWD/build/test-results/test:/app/build/test-results/test \
+                              -v $PWD/build/test-results:/app/test-results \
+                              -e TEST_RESULTS_DIR=/app/test-results \
                               ${IMAGE_NAME}
                         '''
             }
@@ -35,7 +36,7 @@ pipeline {
     post {
         always {
             // Make sure this path exists or Gradle is generating XML test reports
-            junit '$PWD/build/test-results/test/*.xml'
+            junit 'test-results/*.xml'
         }
     }
 }

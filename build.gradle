@@ -49,4 +49,9 @@ test {
             // ./gradlew clean test -Dgroups="smoke,regression"
         }
     }
+
+    reports {
+        junitXml.required.set(true)
+        junitXml.outputLocation.set(file(System.getenv("TEST_RESULTS_DIR") ?: "$buildDir/test-results"))
+    }
 }
