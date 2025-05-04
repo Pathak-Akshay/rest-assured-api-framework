@@ -51,7 +51,8 @@ test {
     }
 
     reports {
-        junitXml.required.set(true)
-        junitXml.outputLocation.set(file(System.getenv("TEST_RESULTS_DIR") ?: "$buildDir/test-results"))
+        junitXml.enabled = true
+        html.enabled = true
+        junitXml.destination = file("$buildDir/test-results/test") // optional, default path
     }
 }
