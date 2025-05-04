@@ -24,7 +24,7 @@ pipeline {
             steps {
                 sh '''
                             mkdir -p test-results/test
-                            docker run --rm \
+                            docker run \
                               -v $PWD/build/test-results:/app/test-results \
                               -e TEST_RESULTS_DIR=/app/test-results \
                               ${IMAGE_NAME}
