@@ -35,8 +35,16 @@ pipeline {
 
     post {
         always {
-            // Make sure this path exists or Gradle is generating XML test reports
-            junit 'test-results/*.xml'
-        }
+                echo "Listing contents of test-results directory:"
+                sh 'ls -la test-results'
+
+                echo "Listing contents of test-results/test directory:"
+                sh 'ls -la test-results/test || echo "test directory does not exist"'
+
+                echo "Looking for JUnit XML files:"
+                sh 'find test-results -name "*.xml" || echo "No XML files found"'
+
+                junit 'test-results/**/*.xml'
+            }
     }
 }
