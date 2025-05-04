@@ -22,7 +22,12 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                sh 'docker run --rm -v $PWD/build/test-results:/app/build/test-results ${IMAGE_NAME}'
+                sh '''
+                            mkdir -p test-results/test
+                            docker run --rm \
+                              -v $PWD/build/test-results/test:/app/build/test-results/test \
+                              ${IMAGE_NAME}
+                        '''
             }
         }
     }
