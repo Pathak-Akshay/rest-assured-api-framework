@@ -11,4 +11,4 @@ COPY . .
 RUN chmod +x gradlew
 
 # Build and run tests
-CMD ["./gradlew", "clean", "test", "--no-daemon"]
+CMD ["./gradlew", "test", "--no-daemon"]
