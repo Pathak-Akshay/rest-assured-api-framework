@@ -28,6 +28,8 @@ pipeline {
                               -v $PWD/build/test-results:/app/test-results \
                               -e TEST_RESULTS_DIR=/app/test-results \
                               ${IMAGE_NAME}
+                              echo "Listing copied test results:"
+                                      ls -R test-results
                         '''
             }
         }
