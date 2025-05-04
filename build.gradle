@@ -53,7 +53,7 @@ test {
     reports {
 
         junitXml.required.set(true);
-        junitXml.outputLocation.set(file(System.getenv("TEST_RESULTS_DIR") ?: "$buildDir/test-results"))
+        junitXml.outputLocation.set(file(System.getenv("TEST_RESULTS_DIR") ?: "$buildDir/test-results/test"))
         html.required.set(true);
     }
 }
