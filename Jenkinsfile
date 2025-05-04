@@ -35,7 +35,7 @@ pipeline {
     post {
         always {
             // Make sure this path exists or Gradle is generating XML test reports
-            junit 'test-results/test/*.xml'
+            junit '$PWD/build/test-results/test/*.xml'
         }
     }
 }
