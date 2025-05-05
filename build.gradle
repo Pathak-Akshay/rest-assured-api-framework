@@ -53,7 +53,7 @@ test {
     reports {
         junitXml.required.set(true)
         html.required.set(true)
-        junitXml.outputLocation.set(file("$projectDir/test-results/test"))
+        junitXml.outputLocation.set(file("$buildDir/test-results/test"))
     }
 }
 

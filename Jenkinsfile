@@ -22,31 +22,16 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                sh '''
-                            mkdir -p test-results/test
-                            docker run \
-                              -v $PWD/build/test-results:/app/test-results \
-                              -e TEST_RESULTS_DIR=/app/test-results \
-                              ${IMAGE_NAME}
-                              echo "Listing copied test results:"
-                                      ls -R test-results
-                        '''
+                // Mount the full build folder so test results are preserved
+                sh 'docker run --rm -v $PWD/build:/app/build ${IMAGE_NAME}'
             }
         }
     }
 
     post {
         always {
-                echo "Listing contents of test-results directory:"
-                sh 'ls -la test-results'
-
-                echo "Listing contents of test-results/test directory:"
-                sh 'ls -la test-results/test || echo "test directory does not exist"'
-
-                echo "Looking for JUnit XML files:"
-                sh 'find test-results -name "*.xml" || echo "No XML files found"'
-
-                junit 'test-results/**/*.xml'
-            }
+            // This path must match where Gradle generates XML reports
+            junit 'build/test-results/test/*.xml'
+        }
     }
 }
