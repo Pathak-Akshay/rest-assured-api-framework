@@ -33,14 +33,11 @@ pipeline {
 
     post {
         always {
-            // List files to debug before JUnit collection
-            sh '''
-                echo "Listing contents of build/test-results:"
-                ls -R build/test-results || echo "No test-results found"
-            '''
+                    // Archive HTML test report
+                    archiveArtifacts artifacts: 'build/reports/tests/test/**', fingerprint: true
 
-            // Publish test results
-            junit 'build/test-results/test/*.xml'
-        }
+                    // Optionally, print a message to locate report
+                    echo 'HTML report archived. You can download and view index.html from the build artifacts.'
+                }
     }
 }
