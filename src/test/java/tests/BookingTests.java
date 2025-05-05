@@ -154,5 +154,11 @@ public class BookingTests extends BaseTest {
         Assertions.assertEquals(response.getStatusCode(), 201, "Status code validation for delete");
     }
 
+    @Test
+    public void testFailure(){
+
+        Assertions.assertFalse(true, "Failed");
+    }
+
 
 }
