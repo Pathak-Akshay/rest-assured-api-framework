@@ -82,6 +82,9 @@ pipeline {
 
             // Optionally, print a message to locate report
             echo 'Test artifacts archived. You can download and view index.html from the build artifacts.'
+
+            // Publish test results
+            junit 'build/test-results/test/*.xml'
         }
     }
 }
