@@ -10,5 +10,8 @@ COPY . .
 # Give permission to gradlew (important for Linux containers)
 RUN chmod +x gradlew
 
+# Pre-create test results folder to avoid missing dir issue
+RUN mkdir -p build/test-results/test
+
 # Build and run tests
-CMD ["./gradlew", "test", "--no-daemon"]
+CMD ["./gradlew", "test", "--no-daemon", "--info"]
