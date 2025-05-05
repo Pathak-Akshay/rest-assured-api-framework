@@ -19,7 +19,6 @@ pipeline {
                 // Clean build directory before starting
                 sh 'rm -rf build || true'
                 sh 'mkdir -p build'
-                sh 'chmod -R 777 build'
                 sh 'ls -la'  // Debug: List current directory
             }
         }
@@ -30,44 +29,56 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
+        stage('Run Tests & Copy Results') {
             steps {
-                // Run tests and mount volume with absolute path to ensure proper mounting
+                // Use a simpler approach: Run tests in container then extract results
                 sh '''
-                    echo "Current directory: $(pwd)"
-                    docker run --rm \
-                      -v "$(pwd)/build:/app/build" \
-                      --name test-container \
-                      ${IMAGE_NAME}
+                    # Run tests in container
+                    echo "Running tests in container..."
+                    docker run --name test-container ${IMAGE_NAME}
 
-                    # Check docker exit code
+                    # Check exit code
                     DOCKER_EXIT=$?
                     echo "Docker exited with code: $DOCKER_EXIT"
 
-                    # Copy files from container if they weren't properly mounted
-                    if [ ! -f "build/reports/tests/test/index.html" ] && [ $DOCKER_EXIT -eq 0 ]; then
-                      echo "Test results not found in mounted volume, attempting to copy from container..."
-                      docker create --name temp-container ${IMAGE_NAME}
-                      docker cp temp-container:/app/build/. ./build/
-                      docker rm temp-container
-                    fi
+                    # Copy all build files from container
+                    echo "Copying test results from container..."
+                    docker cp test-container:/app/build/. ./build/
+
+                    # Delete container
+                    docker rm test-container
+
+                    # Fix permissions
+                    chmod -R 755 build/
+
+                    # Verify files were copied
+                    echo "Files in build directory after copy:"
+                    find build -type f | wc -l
                 '''
             }
         }
 
         stage('Check Test Results') {
             steps {
-                // Debug steps to verify files exist
-                sh 'echo "Contents of build directory:"'
-                sh 'find build -type f | sort || echo "No files found in build directory"'
+                // Verify test report exists
+                sh '''
+                    if [ -f "build/reports/tests/test/index.html" ]; then
+                        echo "✅ Test report found!"
+                        ls -la build/reports/tests/test/
+                    else
+                        echo "❌ Test report NOT found!"
+                        echo "Directory structure:"
+                        find build -type d | sort
+                    fi
+                '''
             }
         }
     }
 
     post {
         always {
-            // Archive HTML test report
-            archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true, fingerprint: true
+            // Archive everything in build directory
+            archiveArtifacts artifacts: 'build/**/*', allowEmptyArchive: true, fingerprint: true
 
             // Optionally, print a message to locate report
             echo 'Test artifacts archived. You can download and view index.html from the build artifacts.'
