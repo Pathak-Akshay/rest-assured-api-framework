@@ -22,15 +22,24 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                // Mount the full build folder so test results are preserved
-                sh 'docker run --rm -v $PWD/build:/app/build ${IMAGE_NAME}'
+                // Mount full build directory to persist test results
+                sh '''
+                    mkdir -p build
+                    docker run --rm -v "$PWD/build:/app/build" ${IMAGE_NAME}
+                '''
             }
         }
     }
 
     post {
         always {
-            // This path must match where Gradle generates XML reports
+            // List files to debug before JUnit collection
+            sh '''
+                echo "Listing contents of build/test-results:"
+                ls -R build/test-results || echo "No test-results found"
+            '''
+
+            // Publish test results
             junit 'build/test-results/test/*.xml'
         }
     }
