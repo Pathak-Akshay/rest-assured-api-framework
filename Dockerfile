@@ -14,4 +14,4 @@ RUN chmod +x gradlew
 RUN mkdir -p build/test-results/test
 
 # Build and run tests
-CMD ["./gradlew", "clean", "test", "--no-daemon", "--info"]
+CMD ["./gradlew", "build", "test", "--no-daemon", "--info"]
