@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'windows-docker-agent'
+        label 'windows-docker-agent'  // This should actually be a Linux agent based on the error
     }
 
     environment {
@@ -16,32 +16,33 @@ pipeline {
 
         stage('Clean') {
             steps {
-                // Clean build directory before starting (using Windows commands)
-                bat 'if exist build rmdir /s /q build'
-                bat 'mkdir build'
+                // Clean build directory before starting (using Linux commands)
+                sh 'rm -rf build || true'
+                sh 'mkdir -p build'
+                sh 'chmod -R 777 build'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                bat 'docker build -t %IMAGE_NAME% .'
+                sh 'docker build -t ${IMAGE_NAME} .'
             }
         }
 
         stage('Run Tests') {
             steps {
-                // Use Windows syntax for Docker but handle Linux paths correctly inside container
-                bat '''
-                    docker run --rm -v "%CD%/build:/app/build" %IMAGE_NAME%
+                // Use Linux syntax for Docker commands
+                sh '''
+                    docker run --rm -v "$(pwd)/build:/app/build" ${IMAGE_NAME}
                 '''
             }
         }
 
         stage('Check Test Results') {
             steps {
-                // Debug step to verify files exist (using Windows commands)
-                bat 'dir build'
-                bat 'dir build\\reports\\tests\\test || echo "Test reports directory not found"'
+                // Debug step to verify files exist (using Linux commands)
+                sh 'ls -la build'
+                sh 'ls -la build/reports/tests/test || echo "Test reports directory not found"'
             }
         }
     }
