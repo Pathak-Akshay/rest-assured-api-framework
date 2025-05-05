@@ -56,3 +56,11 @@ test {
         junitXml.outputLocation.set(file("$projectDir/test-results/test"))
     }
 }
+
+tasks.register('printInfo') {
+    doLast {
+        println "Project Dir: ${project.projectDir}"
+        println "Build Dir: ${buildDir}"
+        println "Test Results Dir: ${buildDir}/test-results/test"
+    }
+}
