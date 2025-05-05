@@ -24,7 +24,7 @@ pipeline {
             steps {
                 // Mount full build directory to persist test results
                 sh '''
-                    docker run --rm -v "$PWD:/app" ${IMAGE_NAME}
+                    docker run --rm -v $PWD:/app -w /app ${IMAGE_NAME}
                 '''
             }
         }
